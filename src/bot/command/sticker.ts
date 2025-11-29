@@ -1,6 +1,6 @@
 import { CommandType } from "../type/client";
 import { prefix } from "../../shared/constant/env";
-import { downloadMediaMessage } from "@whiskeysockets/baileys";
+import { downloadMediaMessage } from "baileys";
 import logger from "../../shared/lib/logger";
 import { Sticker, StickerTypes } from 'wa-sticker-formatter';
 import ffmpeg from "fluent-ffmpeg";

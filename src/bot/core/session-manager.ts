@@ -1,4 +1,4 @@
-import { proto } from "@whiskeysockets/baileys";
+import { proto } from "baileys";
 import { Client, CommandType, SessionUserType } from "../type/client";
 
 /**
@@ -33,7 +33,7 @@ export class SessionManager {
         const targetCommand = this._findCommandByPath(newPath);
 
         if (!targetCommand) {
-            this.client.messageClient.sendMessage(msg.key.remoteJid!, {
+            this.client.messageClient.sendMessage(msg.key?.remoteJid!, {
                 text: "Maaf, sesi atau perintah tidak dapat ditemukan."
             });
             return;
@@ -140,9 +140,9 @@ export class SessionManager {
      * @returns JID pengirim atau null jika tidak ditemukan.
      */
     private _getSenderJid(msg: proto.IWebMessageInfo): string | null {
-        return msg.key.remoteJid?.endsWith("@g.us") 
-            ? msg.key.participant || null 
-            : msg.key.remoteJid || null;
+        return msg.key?.remoteJid?.endsWith("@g.us") 
+            ? msg.key?.participant || null 
+            : msg.key?.remoteJid || null;
     }
 
     /**

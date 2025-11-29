@@ -1,7 +1,7 @@
 import { removeBackground } from "@imgly/background-removal-node";
 import { prefix } from "../../shared/constant/env";
 import { saveFileToTemp } from "../../shared/lib/storage";
-import { downloadMediaMessage } from "@whiskeysockets/baileys";
+import { downloadMediaMessage } from "baileys";
 import * as fs from "fs";
 import { CommandType } from "../type/client";
 import logger from "../../shared/lib/logger";

@@ -1,4 +1,4 @@
-import { BaileysEventMap, proto } from "@whiskeysockets/baileys";
+import { BaileysEventMap, proto, WAMessage } from "baileys";
 import { WhatsappClient } from "../core/whatsaap";
 
 export type Client = WhatsappClient
@@ -15,7 +15,7 @@ export type CommandType = {
   description: string;
   usage?: string;
   execute: (
-    message: proto.IWebMessageInfo,
+    message: WAMessage,
     client: Client,
     payload: PayloadMessage,
     data?: object | any
@@ -27,12 +27,6 @@ export type SessionUserType = {
   current: string[]
   session: CommandType;
   data: object | any,
-}
-
-export type ClientContextType = {
-  client: Client,
-  message: proto.IWebMessageInfo,
-  payload: PayloadMessage
 }
 
 export type PayloadMessage = {
@@ -48,4 +42,9 @@ export type PayloadMessage = {
   isMentioned: boolean
 }
 
+export type ClientContextType = {
+  client: Client,
+  message: proto.IWebMessageInfo,
+  payload: PayloadMessage
+}
 export type ClientMiddlewareType = (context: ClientContextType, next: () => void) => any

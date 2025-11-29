@@ -1,4 +1,4 @@
-import { BaileysEventMap, proto } from "@whiskeysockets/baileys";
+import { BaileysEventMap, proto, WAMessage } from "baileys";
 import path from "path";
 import fs from "fs";
 import { Client, ClientMiddlewareType, CommandType, PayloadMessage, SessionUserType } from "../type/client";
@@ -197,7 +197,7 @@ export class CommandManager {
      * @param message Objek pesan Baileys.
      * @param senderJid JID pengirim.
      */
-    private async routeMessage(message: proto.IWebMessageInfo, payload: PayloadMessage, senderJid: string): Promise<void> {
+    private async routeMessage(message: WAMessage, payload: PayloadMessage, senderJid: string): Promise<void> {
 
         const unwrappedContent = MessageClient.normalizeMessage(message);
         if (!unwrappedContent) return;
@@ -216,7 +216,7 @@ export class CommandManager {
     /**
      * Memproses command dari user yang sedang dalam sesi interaktif.
      */
-    private handleUserInSession(payload: PayloadMessage, message: proto.IWebMessageInfo, userSession: SessionUserType): void {
+    private handleUserInSession(payload: PayloadMessage, message: WAMessage, userSession: SessionUserType): void {
 
         if (this.handleSessionNavigation(payload.command, message, userSession)) {
             return;
@@ -228,14 +228,14 @@ export class CommandManager {
             sessionCommand.execute(message, this.client, payload, userSession.data);
         } else {
             const helpText = this.buildHelpMessage(userSession.session, userSession.current.length > 1);
-            this.client.messageClient.sendMessage(message.key.remoteJid!, { text: helpText });
+            this.client.messageClient.sendMessage(message.key?.remoteJid!, { text: helpText });
         }
     }
 
     /**
      * Memproses command dari user normal (tidak dalam sesi).
      */
-    private handleNormalUser(payload: PayloadMessage, message: proto.IWebMessageInfo): void {
+    private handleNormalUser(payload: PayloadMessage, message: WAMessage): void {
         const command = this.getCommand(payload.command);
 
         if (command) {
@@ -277,7 +277,7 @@ export class CommandManager {
 
         if (lowerCaseCommand === '/exit') {
             this.client.sessionManager.endSessionForUser(msg);
-            this.client.messageClient.sendMessage(msg.key.remoteJid!, { text: `Sesi *${session.session.name}* telah diakhiri.` });
+            this.client.messageClient.sendMessage(msg.key?.remoteJid!, { text: `Sesi *${session.session.name}* telah diakhiri.` });
             return true;
         }
 
@@ -295,7 +295,7 @@ export class CommandManager {
 
             if (!command) return false;
             const helpMessage = this.buildHelpMessage(command, current.length > 1);
-            this.client.messageClient?.sendMessage(msg.key.remoteJid!, { text: helpMessage });
+            this.client.messageClient?.sendMessage(msg.key?.remoteJid!, { text: helpMessage });
             return true;
         }
 

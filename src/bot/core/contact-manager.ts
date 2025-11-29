@@ -1,5 +1,5 @@
 import { promises as fs } from "fs";
-import { Contact } from "@whiskeysockets/baileys";
+import { Contact } from "baileys";
 import { WhatsappClient } from "./whatsaap";
 import path from "path";
 

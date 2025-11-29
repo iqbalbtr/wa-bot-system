@@ -2,7 +2,7 @@ import { eq } from "drizzle-orm";
 import db from "../../database";
 import { groupSettings } from "../../database/schema";
 import { CommandType } from "../type/client";
-import { proto } from "@whiskeysockets/baileys";
+import { proto } from "baileys";
 import client from "..";
 import { extractContactId, extractLid, generateSessionFooterContent } from "../lib/util";
 
@@ -51,10 +51,10 @@ function extractGroupValueSetting(text: string) {
 }
 
 function isGroupMessageAndAdminMessage(message: proto.IWebMessageInfo): boolean {
-    const isGroup = message.key.remoteJid?.endsWith("@g.us") || false;
-    const groupMetadata = client.groupCache.get(message.key.remoteJid!);
+    const isGroup = message.key?.remoteJid?.endsWith("@g.us") || false;
+    const groupMetadata = client.groupCache.get(message.key?.remoteJid!);
     if (!groupMetadata) return false;
-    const isAdmin = !!groupMetadata.participants.find(p => p.id === message.key.participant && p.admin);
+    const isAdmin = !!groupMetadata.participants.find(p => p.id === message.key?.participant && p.admin);
     return isGroup && isAdmin;
 }
 

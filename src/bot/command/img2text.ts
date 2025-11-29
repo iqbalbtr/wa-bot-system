@@ -1,7 +1,7 @@
 import { createWorker } from "tesseract.js";
 import { prefix } from "../../shared/constant/env";
 import sharp from "sharp";
-import { downloadMediaMessage } from "@whiskeysockets/baileys";
+import { downloadMediaMessage } from "baileys";
 import { CommandType } from "../type/client";
 import logger from "../../shared/lib/logger";
 

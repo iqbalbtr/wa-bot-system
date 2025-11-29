@@ -1,5 +1,5 @@
 import { Boom } from '@hapi/boom';
-import { ConnectionState, DisconnectReason } from '@whiskeysockets/baileys';
+import { ConnectionState, DisconnectReason } from 'baileys';
 import qrcode from 'qrcode-terminal';
 import type { ClientEvent } from '../type/client';
 import type { WhatsappClient } from '../core/whatsaap';

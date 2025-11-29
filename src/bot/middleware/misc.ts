@@ -6,7 +6,7 @@ export function miscMiddleware(context: ClientContextType, next: () => void) {
 
     return new Promise(async (resolve) => {
 
-        const userId = message.key.remoteJid
+        const userId = message.key?.remoteJid
 
         if (!userId)
             return

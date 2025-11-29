@@ -29,11 +29,11 @@ export default {
                 const isGreetingActive = isGroup.settings.find(s => s.key === groupEnumSetting.GREETING_NEW_MEMBER && s.value)
 
                 if (isGroup && isGreetingActive) {
-                    const welcomeText = `Halo dan selamat datang di grup, @${participants[0].split('@')[0]}! 🎉`;
+                    const welcomeText = `Halo dan selamat datang di grup, @${participants[0].phoneNumber!.split('@')[0]}! 🎉`;
 
                     await client.messageClient.sendMessage(id, {
                         text: welcomeText,
-                        mentions: participants
+                        mentions: [participants[0].phoneNumber!]
                     });
                 }
             }

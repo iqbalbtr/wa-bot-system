@@ -3,7 +3,7 @@ import {
     MiscMessageGenerationOptions,
     proto,
     WASocket,
-} from "@whiskeysockets/baileys";
+} from "baileys";
 import { WhatsappClient } from "./whatsaap";
 import logger from "../../shared/lib/logger";
 import fs from "fs";

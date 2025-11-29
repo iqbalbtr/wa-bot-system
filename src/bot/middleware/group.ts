@@ -10,7 +10,7 @@ export function groupMiddleware(context: ClientContextType, next: () => void) {
 
     return new Promise(async (resolve) => {
 
-        const userId = message.key.remoteJid
+        const userId = message.key?.remoteJid
 
         if (!userId)
             return
@@ -32,7 +32,7 @@ export function groupMiddleware(context: ClientContextType, next: () => void) {
 
         if (isExist) {
             const allowCommandInGroup = isExist.settings.find((setting) => setting.key === groupEnumSetting.ALLOW_COMMAND);
-            const isAdmin = currentGroup?.participants.find((p) => p.id === message.key.participant && p.admin)
+            const isAdmin = currentGroup?.participants.find((p) => p.id === message.key?.participant && p.admin)
             if (
                 allowCommandInGroup &&
                 !allowCommandInGroup.value &&
@@ -42,7 +42,7 @@ export function groupMiddleware(context: ClientContextType, next: () => void) {
                 if (payload.isGroup && payload.isMentioned) {
                     client.messageClient.sendMessage(userId, {
                         text: "Hanya admin yang bisa menggunakan command, silakan ubah setingan group.",
-                        mentions: [message.key.participant!]
+                        mentions: [message.key?.participant!]
                     });
                 }
                 return;

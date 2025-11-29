@@ -1,5 +1,16 @@
 [
     {
+        "date" : "21 Agustus",
+        "changes": [
+            "Mengganti prefix mcc![command] -> ![command]",
+            "Migrasi core ke baileys",
+            "Menambahkan konversi, pdf2docx, img2pdf",
+            "Menambahkan command group, promote, demote, kick",
+            "Menambahkan konfigurasi grup",
+            "Refaktor kode dan peningkatan performa"
+        ]
+    },
+    {
         "date": "17 Maret 2025",
         "changes": [
             "Memperbaiki transparasi stiker",

@@ -1,4 +1,4 @@
-import { downloadMediaMessage, proto } from "@whiskeysockets/baileys";
+import { downloadMediaMessage, proto } from "baileys";
 import { prefix } from "../../shared/constant/env";
 import { CommandType } from "../type/client";
 import { saveFileToTemp } from "../../shared/lib/storage";
@@ -17,7 +17,7 @@ export default {
     execute: (message, client) => {
         client.sessionManager.startOrAdvanceSession(message, 'converter');
         const reply = generateSessionFooterContent("converter");
-        client.messageClient.sendMessage(message.key.remoteJid!, { text: reply });
+        client.messageClient.sendMessage(message.key?.remoteJid!, { text: reply });
     },
     commands: [
         {
@@ -37,7 +37,7 @@ export default {
                     const media = await downloadMediaMessage(message, "buffer", {});
 
                     if (!media) {
-                        await client.messageClient.sendMessage(message.key.remoteJid, { text: "Pastikan file PDF dikirim bersama commandnya" });
+                        await client.messageClient.sendMessage(message.key?.remoteJid!, { text: "Pastikan file PDF dikirim bersama commandnya" });
                         return;
                     }
 

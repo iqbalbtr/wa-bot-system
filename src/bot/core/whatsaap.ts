@@ -7,7 +7,7 @@ import makeWASocket, {
     proto,
     useMultiFileAuthState,
     WASocket,
-} from "@whiskeysockets/baileys";
+} from "baileys";
 import P from "pino";
 import path from "path";
 import fs from "fs";

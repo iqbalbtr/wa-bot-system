@@ -1,6 +1,6 @@
 import { devId, prefix } from "../../shared/constant/env";
 import { CommandType } from "../type/client";
-import { downloadMediaMessage } from "@whiskeysockets/baileys";
+import { downloadMediaMessage } from "baileys";
 import logger from "../../shared/lib/logger";
 import { generateSessionFooterContent } from "../lib/util";
 
