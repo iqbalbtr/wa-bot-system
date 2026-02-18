@@ -83,9 +83,7 @@ function getDataHelpWithPagination(client: Client, page: number, limit: number, 
     const allCommand = [...client.commandManager.getAllCommands()].slice(skip, skip + limit);
 
     let content = `*📖 Daftar Perintah Bot*\n`;
-    content += `────────────────────────\n`;
     content += `*Halaman:* ${page} / ${totalPage}\n`;
-    content += `────────────────────────\n`;
 
     for (const command of allCommand) {
         content += `*${command.name}*\n`;
@@ -93,11 +91,10 @@ function getDataHelpWithPagination(client: Client, page: number, limit: number, 
         if (command.usage) {
             content += `Contoh: ${command.usage}\n`;
         }
-        content += `────────────────────────\n`;
     }
 
-    content += `\n🔹 Gunakan perintah /next atau /prev untuk navigasi halaman.`;
-    content += `\n🔸 Jangan lupa mention bot jika di grup!`;
+    content += `\n* Gunakan perintah /next atau /prev untuk navigasi halaman.`;
+    content += `\n* Jangan lupa mention bot jika di grup!`;
 
     return content;
 }

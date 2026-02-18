@@ -1,0 +1,12 @@
+{
+    "slug": "dummy-slug",
+    "title": "Dummy Title",
+    "description": "This is a dummy description for testing purposes.",
+    "order": "asc",
+    "due_date": "2026-3-15",
+    "instruction_url": "http://example.com/instructions",
+    "message": "This is a dummy message.",
+    "min_score": 0,
+    "max_score": 100,
+    "max_attempts": 5
+}

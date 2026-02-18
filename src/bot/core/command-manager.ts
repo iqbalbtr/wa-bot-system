@@ -6,6 +6,7 @@ import { extractCommandFromPrefix, extractContactId, extractLid, extractMessageF
 import logger from "../../shared/lib/logger";
 import { limiterMiddleware } from "../middleware/request-limiter";
 import { MessageClient } from "./message-client";
+import { SessionManager } from "./session-manager";
 
 /**
  * Mengelola semua command (perintah) yang tersedia untuk bot,
@@ -158,12 +159,9 @@ export class CommandManager {
             return extractContactId(jid) === clientInfo?.phone;
         })
 
-        const senderJid = message.key.remoteJid.endsWith("@g.us")
-            ? message.key.participant || ""
-            : message.key.remoteJid;
+        let senderJid = SessionManager.getSenderJid(message);
 
         if (!senderJid) return;
-
 
         const payload: PayloadMessage = {
             from: senderJid,
@@ -202,14 +200,14 @@ export class CommandManager {
         const unwrappedContent = MessageClient.normalizeMessage(message);
         if (!unwrappedContent) return;
 
-        if (!this.shouldProcessMessage(payload)) return;
+        if (!!this.shouldProcessMessage(payload)) {
 
-
-        const userSession = this.client.sessionManager.getUserSession(senderJid);
-        if (userSession) {
-            this.handleUserInSession(payload, message, userSession);
-        } else {
-            this.handleNormalUser(payload, message);
+            const userSession = this.client.sessionManager.getUserSession(senderJid);
+            if (userSession) {
+                this.handleUserInSession(payload, message, userSession);
+            } else {
+                this.handleNormalUser(payload, message);
+            }
         }
     }
 
@@ -226,7 +224,9 @@ export class CommandManager {
 
         if (sessionCommand) {
             sessionCommand.execute(message, this.client, payload, userSession.data);
-        } else {
+        }
+
+        if (sessionCommand && !sessionCommand.skipDefaultCommandReply) {
             const helpText = this.buildHelpMessage(userSession.session, userSession.current.length > 1);
             this.client.messageClient.sendMessage(message.key?.remoteJid!, { text: helpText });
         }
@@ -255,10 +255,11 @@ export class CommandManager {
      * @returns `true` jika pesan harus diproses.
      */
     private shouldProcessMessage(payload: PayloadMessage): boolean {
-        if (!payload.isGroup) return true;
 
         const clientInfo = this.client.getInfoClient();
         if (!clientInfo) return false;
+        if (!!payload.originalText == false) return false;
+        if (!payload.isGroup) return true;
 
         return payload.mentionedIds.some(jid => {
             if (jid.endsWith("@lid")) {
@@ -272,7 +273,7 @@ export class CommandManager {
      * Mengelola navigasi dalam sesi seperti /exit dan /back.
      * @returns `true` jika command adalah navigasi dan sudah ditangani.
      */
-    private handleSessionNavigation(commandName: string, msg: proto.IWebMessageInfo, session: SessionUserType): boolean {
+    private handleSessionNavigation(commandName: string, msg: WAMessage, session: SessionUserType): boolean {
         const lowerCaseCommand = commandName.toLowerCase();
 
         if (lowerCaseCommand === '/exit') {

@@ -1,4 +1,4 @@
-import { proto } from "baileys";
+import { proto, WAMessage } from "baileys";
 import { Client, CommandType, SessionUserType } from "../type/client";
 
 /**
@@ -23,8 +23,8 @@ export class SessionManager {
      * @param commandName Nama command (langkah sesi) yang akan dituju.
      * @param data Data tambahan yang akan disimpan dalam sesi.
      */
-    public startOrAdvanceSession(msg: proto.IWebMessageInfo, commandName: string, data?: object): void {
-        const userId = this._getSenderJid(msg);
+    public startOrAdvanceSession(msg: WAMessage, commandName: string, data?: object): void {
+        const userId = SessionManager.getSenderJid(msg);
         if (!userId) return;
 
         const existingSession = this.userSessions.get(userId);
@@ -51,8 +51,8 @@ export class SessionManager {
      * @param msg Objek pesan dari Baileys.
      * @param data Objek data baru untuk disimpan.
      */
-    public updateSessionData(msg: proto.IWebMessageInfo, data: object): void {
-        const userId = this._getSenderJid(msg);
+    public updateSessionData(msg: WAMessage, data: object): void {
+        const userId = SessionManager.getSenderJid(msg);
         if (!userId) return;
 
         const session = this.userSessions.get(userId);
@@ -67,8 +67,8 @@ export class SessionManager {
      * @param msg Objek pesan dari Baileys.
      * @param stepsBerapa langkah ingin kembali (default 1).
      */
-    public goBackInSession(msg: proto.IWebMessageInfo, steps: number = 1): void {
-        const userId = this._getSenderJid(msg);
+    public goBackInSession(msg: WAMessage, steps: number = 1): void {
+        const userId = SessionManager.getSenderJid(msg);
         if (!userId) return;
 
         const session = this.userSessions.get(userId);
@@ -109,8 +109,8 @@ export class SessionManager {
      * Menghapus sesi aktif untuk seorang pengguna.
      * @param msg Objek pesan dari Baileys.
      */
-    public endSessionForUser(msg: proto.IWebMessageInfo): void {
-        const userId = this._getSenderJid(msg);
+    public endSessionForUser(msg: WAMessage): void {
+        const userId = SessionManager.getSenderJid(msg);
         if (userId) {
             this.userSessions.delete(userId);
         }
@@ -129,22 +129,26 @@ export class SessionManager {
     public getActiveUserJids(): string[] {
         return Array.from(this.userSessions.keys());
     }
-
-    // =================================================================================
-    // Metode Privat (Helpers)
-    // =================================================================================
-
+    
     /**
      * Helper untuk mengekstrak JID pengirim dari objek pesan.
      * @param msg Objek pesan dari Baileys.
      * @returns JID pengirim atau null jika tidak ditemukan.
      */
-    private _getSenderJid(msg: proto.IWebMessageInfo): string | null {
-        return msg.key?.remoteJid?.endsWith("@g.us") 
-            ? msg.key?.participant || null 
-            : msg.key?.remoteJid || null;
+    public static getSenderJid(msg: WAMessage): string | null {
+        const number =  msg.key?.remoteJid?.endsWith("@g.us") 
+        ? msg.key?.participantAlt || null 
+        : msg.key?.remoteJidAlt || null;
+        
+        const user = number?.split("@")[0];
+        
+        return user || null;
     }
 
+    // =================================================================================
+    // Metode Privat (Helpers)
+    // =================================================================================
+    
     /**
      * Helper untuk menavigasi dan menemukan objek command berdasarkan path (urutan nama command).
      * @param path Array nama command, contoh: ['menu', 'order'].

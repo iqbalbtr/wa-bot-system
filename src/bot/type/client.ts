@@ -13,6 +13,7 @@ export type ClientEvent = {
 export type CommandType = {
   name: string;
   description: string;
+  skipDefaultCommandReply?: boolean;
   usage?: string;
   execute: (
     message: WAMessage,
@@ -44,7 +45,7 @@ export type PayloadMessage = {
 
 export type ClientContextType = {
   client: Client,
-  message: proto.IWebMessageInfo,
+  message: WAMessage,
   payload: PayloadMessage
 }
 export type ClientMiddlewareType = (context: ClientContextType, next: () => void) => any

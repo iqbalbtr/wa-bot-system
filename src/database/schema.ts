@@ -1,5 +1,33 @@
-import { sql } from "drizzle-orm";
+import { relations, sql } from "drizzle-orm";
 import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+
+export const student = sqliteTable("students", {
+    id: integer().primaryKey({ autoIncrement: true }),
+    name: text(),
+    nim: text().unique(),
+    phone: text().notNull().unique(),
+    created_at: text().default(sql`(CURRENT_TIMESTAMP)`),
+})
+
+export const chalangeStudent = sqliteTable("chalange_students", {
+    id: integer().primaryKey({ autoIncrement: true }),
+    student_id: integer().notNull(),
+    chalange_slug: text().notNull(),
+    attachment: text().$type<string | null>().default(null),
+    score: integer().default(0),
+    last_updated: text().default(sql`(CURRENT_TIMESTAMP)`),
+})
+
+export const studentRelations = relations(student, ({ many }) => ({
+    chalanges: many(chalangeStudent)
+}))
+
+export const chalangeStudentRelations = relations(chalangeStudent, ({ one }) => ({
+    student: one(student, {
+        fields: [chalangeStudent.student_id],
+        references: [student.id]
+    })
+}))
 
 export const schedules = sqliteTable("schedules", {
     id: integer().primaryKey({ autoIncrement: true }),

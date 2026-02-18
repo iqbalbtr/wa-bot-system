@@ -22,7 +22,7 @@ export function saveFileToTemp(data: string | NodeJS.ArrayBufferView, output: st
     function deleteFile() {
         try {
             fs.unlinkSync(result.outputFolderFile);
-            fs.rmdirSync(outputFolder, { recursive: true });
+            fs.rmdirSync(outputFolder);
         } catch (error) {
             logger.warn("Error deleting file:", error);
         }

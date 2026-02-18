@@ -1,0 +1,11 @@
+{
+  "watch": ["src"],
+  "ext": ".ts,.js",
+  "ignore": [
+    ".wa-auth/*",
+    "node_modules",
+    "*.test.ts",
+    "dist"
+  ],
+  "exec": "ts-node src/main.ts"
+}
