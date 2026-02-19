@@ -2,6 +2,7 @@
   "watch": ["src"],
   "ext": ".ts,.js",
   "ignore": [
+    "src/database/*",
     ".wa-auth/*",
     "node_modules",
     "*.test.ts",

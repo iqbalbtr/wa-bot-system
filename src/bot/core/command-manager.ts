@@ -195,7 +195,7 @@ export class CommandManager {
      * @param message Objek pesan Baileys.
      * @param senderJid JID pengirim.
      */
-    private async routeMessage(message: WAMessage, payload: PayloadMessage, senderJid: string): Promise<void> {
+    private async routeMessage(message: WAMessage, payload: PayloadMessage, senderJid: string): Promise<void> {        
 
         const unwrappedContent = MessageClient.normalizeMessage(message);
         if (!unwrappedContent) return;
@@ -223,10 +223,10 @@ export class CommandManager {
         const sessionCommand = userSession.session.commands?.find(c => c.name.toLowerCase() === payload.command.toLowerCase());
 
         if (sessionCommand) {
-            sessionCommand.execute(message, this.client, payload, userSession.data);
-        }
+            return sessionCommand.execute(message, this.client, payload, userSession.data);
+        }        
 
-        if (sessionCommand && !sessionCommand.skipDefaultCommandReply) {
+        if (!userSession.session?.skipDefaultCommandReply) {
             const helpText = this.buildHelpMessage(userSession.session, userSession.current.length > 1);
             this.client.messageClient.sendMessage(message.key?.remoteJid!, { text: helpText });
         }
