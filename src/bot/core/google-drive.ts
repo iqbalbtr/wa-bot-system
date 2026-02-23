@@ -24,7 +24,7 @@ class GoogleDrive {
     const BASE_FOLDER = get_env("DRIVE_BASE_FOLDER");
     const CLIENT_ID = get_env("GOOGLE_CLIENT_ID");
     const CLIENT_SECRET = get_env("GOOGLE_CLIENT_SECRED");
-    const APP_URL = process.env.API_URL;
+    const APP_URL = get_env("BASE_URL");
 
     this.BASE_FOLDER_ID = BASE_FOLDER;
     const oauth = new google.auth.OAuth2(CLIENT_ID, CLIENT_SECRET, `${APP_URL}/oauth2callback`);

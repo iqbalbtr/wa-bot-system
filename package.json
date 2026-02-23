@@ -5,7 +5,7 @@
   "main": "src/main.js",
   "scripts": {
     "dev": "nodemon src/main.ts",
-    "start": "node --max-old-space-size=4096 dist/main.js",
+    "start": "node dist/main.js",
     "build": "npx tsc",
     "serve": "npm run build && npm run start",
     "db:reset": "drizzle-kit push --reset",
