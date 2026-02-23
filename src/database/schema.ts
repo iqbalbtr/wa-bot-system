@@ -50,3 +50,10 @@ export const groupSettings = sqliteTable("group_settings", {
     group_id: text().notNull(),
     settings: text({ mode: "json" }).$type<Array<{ key: string, value: boolean }>>().notNull()
 })
+
+export const tokens = sqliteTable("tokens", {
+    id: integer().primaryKey({ autoIncrement: true }),
+    name: text(),
+    token: text(),
+    created_at: text().default(sql`(CURRENT_TIMESTAMP)`),
+})

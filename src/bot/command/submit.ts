@@ -6,18 +6,32 @@ import db from '../../database';
 import { ChalangeType } from '../type/chalange';
 import { eq, sql, InferSelectModel, asc, desc, and } from 'drizzle-orm';
 import { chalangeStudent, student } from '../../database/schema';
-import { proto } from 'baileys';
+import { downloadMediaMessage, proto } from 'baileys';
+import { google_drive } from '../core/google-drive';
+import Stream from 'stream';
 
+async function recordSubmission(userId: number, slug: string, score: number, image:  Stream.Transform, nim: string) {
+    const target_folder_id = await google_drive.getTargetFolder([slug, nim]);
 
-async function recordSubmission(userId: number, slug: string, score: number) {
+    let newname = new Date().toLocaleString("id-ID", {
+    day: "2-digit",
+    month: "2-digit",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    second: "2-digit",
+    hour12: false,
+  })
+
+    const attachment = await google_drive.uploadImageFromStream(image, `${newname}.png`, target_folder_id);
+    
     await db.insert(chalangeStudent).values({
         student_id: userId,
         chalange_slug: slug,
-        attachment: "static_storage/placeholder.jpg",
+        attachment:  `https://drive.google.com/file/d/${attachment.id}/view`,
         score,
         last_updated: new Date().toISOString()
     });
-    // kirim ke gdrive /slug/2025xxxx/x_score.jpg
 }
 
 export default {
@@ -58,11 +72,12 @@ export default {
             const attempts = await db.select({ count: sql<number>`count(*)` }).from(chalangeStudent)
                 .where(and(eq(chalangeStudent.student_id, user.id), eq(chalangeStudent.chalange_slug, chall.slug)));
 
-            if (chall.max_attempts && attempts[0].count >= chall.max_attempts) {
-                return client.messageClient.sendMessage(remoteJid, { text: `❌ *Batas Terlampaui:* Anda sudah submit ${attempts[0].count} kali.` });
-            }
+            // if (chall.max_attempts && attempts[0].count >= chall.max_attempts) {
+            //     return client.messageClient.sendMessage(remoteJid, { text: `❌ *Batas Terlampaui:* Anda sudah submit ${attempts[0].count} kali.` });
+            // }
 
-            await recordSubmission(user.id, chall.slug, score);
+            const image = await downloadMediaMessage(msg,"stream", {})
+            await recordSubmission(user.id, chall.slug, score, image, user.nim);
 
             const currentTop = await db
                 .select({
