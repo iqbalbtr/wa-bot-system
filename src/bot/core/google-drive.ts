@@ -58,12 +58,17 @@ class GoogleDrive {
         else await db.insert(tokens).values({ name: TOKEN_NAME, token: res.refresh_token });
       }
       this.auth_client.setCredentials(res);
-      this.drive = google.drive({ version: "v3", auth: this.auth_client });
+      this.updateDriveApi();
       return res;
     } catch (error) {
-      logger.error("error while updatinf credentials", error);
+      logger.error("error while updating credentials", error);
       return null;
     }
+  }
+
+  async updateDriveApi() {
+    this.drive = google.drive({ version: "v3", auth: this.auth_client });
+    await this.auth_client.getAccessToken();
   }
 
   /**
@@ -78,7 +83,7 @@ class GoogleDrive {
         throw Error("no saved key found");
       }
       this.auth_client.setCredentials({ refresh_token: saved_token.token });
-      this.drive = google.drive({ version: "v3", auth: this.auth_client });
+      await this.updateDriveApi();
     } catch (error) {
       const oauth_url = this.getAuthUrl();
       logger.info(`open this in browser to cnnect with google drive: ${oauth_url}`, error);
@@ -86,20 +91,20 @@ class GoogleDrive {
   }
 
   /**
-   * 
+   *
    * @param path path destination
    * @returns folder id
-   * 
-    *  @example google_drive.getTargetFolder(["path","to","dest"]); // will be base/path/to/dest in drive 
+   *
+   *  @example google_drive.getTargetFolder(["path","to","dest"]); // will be base/path/to/dest in drive
    */
   async getTargetFolder(path: string[]) {
     let current_folder_id = this.BASE_FOLDER_ID;
 
     for (const foldername of path) {
-      let next_folder = await this.search(current_folder_id, foldername); 
-      
+      let next_folder = await this.search(current_folder_id, foldername);
+
       if (!next_folder || !next_folder.id) {
-        let new_folder = await this.createFolder(current_folder_id,foldername);
+        let new_folder = await this.createFolder(current_folder_id, foldername);
         current_folder_id = new_folder.id!;
       } else {
         current_folder_id = next_folder.id;
@@ -112,7 +117,7 @@ class GoogleDrive {
   /**
    * get list inside some folder id
    * @param folderId folder id
-   * @returns 
+   * @returns
    */
   async list(folderId: string) {
     if (!this.drive) throw Error("google drive auth is not clear");
@@ -128,7 +133,7 @@ class GoogleDrive {
    * will return single file/folder that match the name.
    * @param folderId folder id
    * @param name name
-   * @returns 
+   * @returns
    */
   async search(folderId: string, name: string) {
     if (!this.drive) throw Error("google drive auth is not clear");
