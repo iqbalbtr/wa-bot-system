@@ -7,12 +7,16 @@ import blockHandler from "./handler/block";
 import uploadHandler from "./handler/upload";
 import { HTTPException } from "hono/http-exception";
 import dashboardHandler from "./handler/dashboard";
+import google_auth_handler from "./handler/google_oauth_callback";
 
 /**
  * 
  * Kamu bisa mengatur konfigurasi route dan rest API server disini
  */
 const api = new Hono()
+
+// this sould be public..
+api.route("/oauth2callback", google_auth_handler);
 
 api.use("*", authMiddleware);
 

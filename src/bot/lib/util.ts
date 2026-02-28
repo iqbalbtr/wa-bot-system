@@ -105,3 +105,13 @@ export function generateSessionFooterContent(...names: string[]) {
 
     return content;
 }
+
+export function get_env(key: string){
+    const value = process.env[key]
+
+    if (!value){
+        throw Error(`${key} is not defined in env. please make sure that ${key} is defined in .env`)
+    }
+
+    return value
+}
