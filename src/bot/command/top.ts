@@ -32,7 +32,7 @@ export default {
 
         const topFive = await db
             .select({
-                score: sql<number>`max(${chalangeStudent.score})`,
+                score: sql<number>`sum(${chalangeStudent.score})`,
                 name: student.name,
                 nick: student.nick,
             })
@@ -40,10 +40,7 @@ export default {
             .innerJoin(student, eq(chalangeStudent.student_id, student.id))
             .where(eq(chalangeStudent.chalange_slug, changelog.slug))
             .groupBy(student.id, student.nim)
-            .orderBy(changelog.order === 'asc' 
-                ? asc(sql`max(${chalangeStudent.score})`) 
-                : desc(sql`max(${chalangeStudent.score})`)
-            )
+            .orderBy(desc(sql`sum(${chalangeStudent.score})`))
             .limit(5);
 
         if (topFive.length === 0) {

@@ -9,7 +9,7 @@ import logger from "../../shared/lib/logger";
 export default {
   name: "rem-bg",
   description: "Menghapus latar belakang dari gambar yang dikirim",
-  usage: `\`${prefix}rem-bg\` kirim gambar dengan caption ini.`,
+  usage: `${prefix}rem-bg kirim gambar dengan caption ini.`,
   execute: async (message, client, payload) => {
     const session = client.getSession();
     if (!session || !message.key?.remoteJid) return;

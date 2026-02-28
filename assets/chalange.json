@@ -1,12 +1,20 @@
 {
-    "slug": "dummy-slug",
-    "title": "Dummy Title",
-    "description": "This is a dummy description for testing purposes.",
-    "order": "asc",
-    "due_date": "2026-3-15",
-    "instruction_url": "http://example.com/instructions",
-    "message": "This is a dummy message.",
-    "min_score": 0,
-    "max_score": 100,
-    "max_attempts": 5
+    "slug": "maret-uiux-01",
+    "category": "UI/UX DESIGN",
+    "title": "The Aesthetic Fix",
+    "description": "Perbaiki layout tombol dan kontras warna pada aplikasi e-commerce favoritmu.",
+    "start_date": "2026-02-15",
+    "due_date": "2026-03-15",
+    "instruction_url": "https://geem.co.id/docs/uiux-01",
+    "challenge_instruction": "https://geem.co.id/tutorial/audit-ui",
+    "submission_url": "https://geem.co.id/submit",
+    "message": "Jangan lupa sertakan alasan logis di balik perubahan desainmu!",
+    "default_score": 50,
+    "extra_score_in_days": [
+        { "score": 25, "days_before": 2 },
+        { "score": 20, "days_before": 5 },
+        { "score": 10, "days_before": 12 },
+        { "score": 5, "days_before": 21 }
+    ],
+    "max_attempts": 20
 }

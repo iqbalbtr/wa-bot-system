@@ -77,12 +77,14 @@ class GoogleDrive {
    */
   async init() {
     try {
-      const saved_token = (await db.select().from(tokens).where(eq(tokens.name, TOKEN_NAME)).limit(1))[0];
+      // const saved_token = (await db.select().from(tokens).where(eq(tokens.name, TOKEN_NAME)).limit(1))[0];
 
-      if (!saved_token || !saved_token.token) {
-        throw Error("no saved key found");
-      }
-      this.auth_client.setCredentials({ refresh_token: saved_token.token });
+      // if (!saved_token || !saved_token.token) {
+      //   throw Error("no saved key found");
+      // }
+      this.auth_client.setCredentials({
+        refresh_token: get_env("GOOGLE_REFRESH_TOKEN"),
+      });
       await this.updateDriveApi();
     } catch (error) {
       const oauth_url = this.getAuthUrl();

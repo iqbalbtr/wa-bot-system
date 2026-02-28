@@ -9,10 +9,10 @@ export default {
     name: "downloader",
     description: "Alat pengunduh video media sosial",
     execute: async (message, client) => {
-    if (!message.key?.remoteJid) return;
-    let content = generateSessionFooterContent('downloader');
-    client.sessionManager.startOrAdvanceSession(message, 'downloader');
-    await client.messageClient.sendMessage(message.key.remoteJid, { text: content });
+        if (!message.key?.remoteJid) return;
+        let content = generateSessionFooterContent('downloader');
+        client.sessionManager.startOrAdvanceSession(message, 'downloader');
+        await client.messageClient.sendMessage(message.key.remoteJid, { text: content });
     },
     commands: [
         {
@@ -79,8 +79,8 @@ export default {
                     content += 'Link download video mp4 (video only):\n';
                     function formatLine(label: string, f: YtDlpFormat) {
                         let size = '';
-                        if (f.filesize) size = ` (${(f.filesize/1024/1024).toFixed(2)} MB)`;
-                        else if (f.filesize_approx) size = ` (~${(f.filesize_approx/1024/1024).toFixed(2)} MB)`;
+                        if (f.filesize) size = ` (${(f.filesize / 1024 / 1024).toFixed(2)} MB)`;
+                        else if (f.filesize_approx) size = ` (~${(f.filesize_approx / 1024 / 1024).toFixed(2)} MB)`;
                         return `• *${label}* [${f.format_note || f.format_id || ''}]${size}\n${f.url}\n`;
                     }
                     if (best) content += formatLine('Best', best);
@@ -88,8 +88,8 @@ export default {
                     if (low && low !== best) content += formatLine('Low', low);
                     if (bestAudio) {
                         let size = '';
-                        if (bestAudio.filesize) size = ` (${(bestAudio.filesize/1024/1024).toFixed(2)} MB)`;
-                        else if (bestAudio.filesize_approx) size = ` (~${(bestAudio.filesize_approx/1024/1024).toFixed(2)} MB)`;
+                        if (bestAudio.filesize) size = ` (${(bestAudio.filesize / 1024 / 1024).toFixed(2)} MB)`;
+                        else if (bestAudio.filesize_approx) size = ` (~${(bestAudio.filesize_approx / 1024 / 1024).toFixed(2)} MB)`;
                         content += `\nLink audio (audio only):\n`;
                         content += `• *Audio* [${bestAudio.format_note || bestAudio.format_id || ''}]${size}\n${bestAudio.url}\n`;
                         content += `\n*Catatan:* Untuk mendapatkan video kualitas tinggi dengan audio, download video dan audio lalu gabungkan dengan aplikasi seperti ffmpeg atau gunakan yt-dlp secara langsung untuk mengunduh file yang sudah digabungkan.`;
