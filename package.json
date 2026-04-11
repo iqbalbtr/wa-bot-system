@@ -10,6 +10,7 @@
     "serve": "npm run build && npm run start",
     "db:reset": "drizzle-kit push --reset",
     "db:migrate": "drizzle-kit push",
+    "db:seed": "ts-node src/database/seeder/index.ts",
     "db:generate": "drizzle-kit generate"
   },
   "author": "iqbalbtr",
