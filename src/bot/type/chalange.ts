@@ -1,5 +1,4 @@
 export type ChalangeType = {
-    slug: string;
     title: string;
     category: string;
     description: string;
@@ -9,10 +8,4 @@ export type ChalangeType = {
     challenge_instruction: string;
     submission_url: string;
     message: string;
-    default_score: number;
-    extra_score_in_days: {
-        score: number;
-        days_before: number;
-    }[];
-    max_attempts?: number;
 }

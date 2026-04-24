@@ -1,5 +1,5 @@
 import { relations, sql } from "drizzle-orm";
-import { integer, sqliteTable, text } from "drizzle-orm/sqlite-core";
+import { integer, sqliteTable, text, uniqueIndex } from "drizzle-orm/sqlite-core";
 
 export const student = sqliteTable("students", {
     id: integer().primaryKey({ autoIncrement: true }),
@@ -13,11 +13,15 @@ export const student = sqliteTable("students", {
 export const chalangeStudent = sqliteTable("chalange_students", {
     id: integer().primaryKey({ autoIncrement: true }),
     student_id: integer().notNull(),
-    chalange_slug: text().notNull(),
     attachment: text().$type<string | null>().default(null),
     score: integer().default(0),
+    challange_date: text().default(sql`(CURRENT_TIMESTAMP)`),
+    challange_category: text().notNull(),
+    challange_title: text().notNull(),
     last_updated: text().default(sql`(CURRENT_TIMESTAMP)`),
-})
+}, tb => [
+    uniqueIndex('chalange_date_chalange_category_student_id_idx').on(tb.challange_date, tb.challange_category, tb.student_id)
+])
 
 export const studentRelations = relations(student, ({ many }) => ({
     chalanges: many(chalangeStudent)

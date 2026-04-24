@@ -172,6 +172,8 @@ const command: CommandType = {
 
             await client.messageClient.sendMessage(jid, {
                 sticker: stickerBuffer
+            }, {
+                quoted: message
             });
 
         } catch (error) {

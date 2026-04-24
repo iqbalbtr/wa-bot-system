@@ -34,7 +34,8 @@ export default {
             .from(chalangeStudent)
             .where(and(
                 eq(chalangeStudent.student_id, existingUser[0]?.id || 0),
-                eq(chalangeStudent.chalange_slug, chall.slug)
+                eq(chalangeStudent.challange_category, chall.category),
+                eq(chalangeStudent.challange_date, chall.start_date)
             ));
 
         if (existingUser.length === 0) {
@@ -142,7 +143,8 @@ export default {
                     .from(chalangeStudent)
                     .where(and(
                         eq(chalangeStudent.student_id, userData[0]?.id || 0),
-                        eq(chalangeStudent.chalange_slug, chall.slug)
+                        eq(chalangeStudent.challange_category, chall.category),
+                        eq(chalangeStudent.challange_date, chall.start_date)
                     ));
 
                 if (userData.length === 0) {

@@ -195,19 +195,26 @@ export class CommandManager {
      * @param message Objek pesan Baileys.
      * @param senderJid JID pengirim.
      */
-    private async routeMessage(message: WAMessage, payload: PayloadMessage, senderJid: string): Promise<void> {        
+    private async routeMessage(message: WAMessage, payload: PayloadMessage, senderJid: string): Promise<void> {
 
         const unwrappedContent = MessageClient.normalizeMessage(message);
         if (!unwrappedContent) return;
 
-        if (!!this.shouldProcessMessage(payload)) {
+        try {
+            if (!!this.shouldProcessMessage(payload)) {
 
-            const userSession = this.client.sessionManager.getUserSession(senderJid);
-            if (userSession) {
-                this.handleUserInSession(payload, message, userSession);
-            } else {
-                this.handleNormalUser(payload, message);
+                const userSession = this.client.sessionManager.getUserSession(senderJid);
+                if (userSession) {
+                    this.handleUserInSession(payload, message, userSession);
+                } else {
+                    this.handleNormalUser(payload, message);
+                }
             }
+        } catch (error) {
+            this.client.logger.error(`Error processing message from ${senderJid}:`, error);
+            this.client.messageClient.sendMessage(message.key?.remoteJid!, {
+                text: '⚠️ Terjadi kesalahan saat memproses perintah. Silakan coba lagi nanti. atau hubungi admin jika masalah berlanjut.'
+            });
         }
     }
 
@@ -224,7 +231,7 @@ export class CommandManager {
 
         if (sessionCommand) {
             return sessionCommand.execute(message, this.client, payload, userSession.data);
-        }        
+        }
 
         if (!userSession.session?.skipDefaultCommandReply) {
             const helpText = this.buildHelpMessage(userSession.session, userSession.current.length > 1);
