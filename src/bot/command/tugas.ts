@@ -44,23 +44,23 @@ export const getCurrentCHalangeInfo = async () => {
         timeLabel = `⏳ *Deadline:* ${days} Hari, ${hours} Jam lagi`;
     }
 
-    let content = `*🏆 EVENT CHALLENGE*\n\n`;
+    let content = `*EVENT CHALLENGE*\n\n`;
 
-    content += `🔥 *TITLE:* _${changelog.title.toUpperCase()}_\n`;
-    content += `📌 *KELAS:* ${changelog.category?.replace('-', ' ')?.toUpperCase() || 'General'}\n`;
+    content += `*TITLE:* _${changelog.title.toUpperCase()}_\n`;
+    content += ` *KELAS:* ${changelog.category?.replace('-', ' ')?.toUpperCase() || 'General'}\n`;
 
-    content += `📝 *DESKRIPSI:*\n`;
+    content += `*DESKRIPSI:*\n`;
     content += `"${changelog.description}"\n\n`;
 
-    content += `📢 *PESAN ADMIN:*\n`;
+    content += `*PESAN ADMIN:*\n`;
     content += `_${changelog.message}_\n\n`;
 
-    content += `📊 *STATISTIK LIVE:*\n`;
-    content += `┌ 👥 *Peserta:* ${participantCount} Member\n`;
-    content += `├ 📥 *Total Entry:* ${entryCount} Laporan\n`;
-    content += `└ 🏅 *Top Score:* ${topScore ? topScore + ' pts' : 'Belum ada'}\n\n`;
+    content += `*STATISTIK LIVE:*\n`;
+    content += `┌ *Peserta:* ${participantCount} Member\n`;
+    content += `├ *Total Entry:* ${entryCount} Laporan\n`;
+    content += `└ *Top Score:* ${topScore ? topScore + ' pts' : 'Belum ada'}\n\n`;
 
-    content += `🔗 *LINK PENTING:*\n`;
+    content += `*LINK PENTING:*\n`;
     content += `├ *Panduan:* ${changelog.instruction_url}\n`;
     content += `├ *Materi:* ${changelog.challenge_instruction}\n`;
     content += `└ *Portal:* ${changelog.submission_url}\n\n`;
@@ -76,8 +76,8 @@ export const getCurrentCHalangeInfo = async () => {
 }
 
 export default {
-    name: "chalange",
-    usage: `${prefix}chalange`,
+    name: "tugas",
+    usage: `${prefix}tugas`,
     description: "Menampilkan informasi detail mengenai tantangan yang sedang berlangsung",
     execute: async (msg, client) => {
         const remoteJid = msg.key?.remoteJid!;

@@ -8,7 +8,7 @@ import { chalangeStudent, groupSettings, student } from '../../database/schema';
 import { generateSessionFooterContent } from '../lib/util';
 import { getChalangeData } from '../../api/lib/util';
 import { getTop } from './top';
-import { getCurrentCHalangeInfo } from './chalange';
+import { getCurrentCHalangeInfo } from './tugas';
 
 const ADMIN_PHONE_NUMBERS = [
     '6281226948547',
@@ -33,7 +33,7 @@ const getChalangeHistory = async (sequenceTarget?: number) => {
         },
         {
             id: 4,
-            student_id: 1,
+            student_id: 2,
             attachment: "https://drive.google.com/file/d/4jkl012/view",
             score: 88,
             challange_date: "2026-03-01",
@@ -196,6 +196,10 @@ export default {
                 // this method return data with this format { category, date, title }
                 const sequenceTarget = await getChalangeHistory(targetSequence);
 
+                // validate if file exist in dir /admin/[category]/[date]/[filename].xlsx or /admin/[category]/[date].csv
+
+                // validate must be array
+
                 // generate excel link
                 // save dir like this /admin/[category]/[date]/[filename].xlsx or /admin/[category]/[date].csv
 
@@ -223,6 +227,21 @@ export default {
 
                 // this method return data with this format { category, date, title }
                 const sequenceTarget = await getChalangeHistory(targetSequence);
+
+                // read spreasheedt and sync to chalange db
+
+                const resultRead = [
+                    {
+                        nim: '12345678',
+                        score: 85,
+                    },
+                    {
+                        nim: '87654321',
+                        score: 90,
+                    }
+                ]
+
+                // loop student and update score in chalange_student table based on nim and challange date and category
 
                 // validate if file exist in dir /admin/[category]/[date]/[filename].xlsx or /admin/[category]/[date].csv
 
