@@ -126,7 +126,7 @@ export default {
   description: "Kelola tantangan (Admin Only)",
   execute: async (msg, client, payload) => {
     const remoteJid = msg.key?.remoteJid!;
-    const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+    const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
 
     if (!ADMIN_PHONE_NUMBERS.find((admin) => student_phone.startsWith(admin))) {
       return client.messageClient.sendMessage(remoteJid, {

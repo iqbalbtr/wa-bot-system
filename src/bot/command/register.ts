@@ -18,7 +18,7 @@ export default {
     client.sessionManager.startOrAdvanceSession(message, "register");
     const footer = generateSessionFooterContent("register");
 
-    const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+    const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
     const existingUser = await db.select().from(student).where(eq(student.phone, student_phone)).limit(1);
 
     const configPath = path.resolve(process.cwd(), "assets", "chalange.json");
@@ -46,7 +46,7 @@ export default {
 
     if (existingUser.length === 0) {
       await db.insert(student).values({
-        phone: payload.from,
+        phone: student_phone,
         name: null,
         nick: null,
         nim: null,
@@ -80,7 +80,7 @@ export default {
           });
         }
 
-        const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+        const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
 
         await db.update(student).set({ nim: input }).where(eq(student.phone, student_phone));
         const footer = generateSessionFooterContent("register");
@@ -101,7 +101,7 @@ export default {
           });
         }
 
-        const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+        const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
         await db.update(student).set({ name: input }).where(eq(student.phone, student_phone));
         const footer = generateSessionFooterContent("register");
         client.messageClient.sendMessage(remoteJid, { text: `✅ Nama berhasil diperbarui: *${input}*.\n\n${footer}` });
@@ -121,7 +121,7 @@ export default {
           });
         }
 
-        const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+        const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
         await db.update(student).set({ nick: input }).where(eq(student.phone, student_phone));
         const footer = generateSessionFooterContent("register");
         client.messageClient.sendMessage(remoteJid, {
@@ -135,7 +135,7 @@ export default {
       usage: `${prefix}info`,
       execute: async (message, client, payload) => {
         const remoteJid = message.key?.remoteJid!;
-        const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+        const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
         const userData = await db.select().from(student).where(eq(student.phone, student_phone)).limit(1);
         const footer = generateSessionFooterContent("register");
 

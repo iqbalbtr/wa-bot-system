@@ -85,7 +85,7 @@ export default {
         let extraScore = 0;
 
         try {
-            const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+            const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
             const user = await db.query.student.findFirst({ where: (s, { eq }) => eq(s.phone, student_phone) });
             if (!user || !user.nim) {
                 return client.messageClient.sendMessage(remoteJid, { text: `⚠️ *Akses Ditolak:* Silakan registrasi terlebih dahulu. !register` });
