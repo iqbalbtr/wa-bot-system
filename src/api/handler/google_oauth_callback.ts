@@ -4,7 +4,7 @@ import { zValidator } from "@hono/zod-validator";
 import { z } from "zod";
 import { HTTPException } from "hono/http-exception";
 import { successResponse } from "../lib/util";
-import { google_drive } from "../../bot/core/google-drive";
+import google_api  from "../../bot/core/google_api/auth";
 
 /**
  * required by OAuth2 flow.
@@ -36,11 +36,11 @@ google_auth_handler.get(
   async (c) => {
     const body = c.req.valid("query");
 
-    if (body.state !== google_drive.state) {
+    if (body.state !== google_api.state) {
       return c.text("Invalid OAuth state", 403);
     }
 
-    const res = await google_drive.getTokenFromCode(body.code);
+    const res = await google_api.getTokenFromCode(body.code);
 
     if (!res) return c.text("failed!", 500);
     return c.text("new credential is saved!");

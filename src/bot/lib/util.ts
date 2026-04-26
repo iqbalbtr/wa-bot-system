@@ -115,3 +115,8 @@ export function get_env(key: string){
 
     return value
 }
+
+export function get_env_optional(key: string){
+    const value = process.env[key]
+    return value
+}

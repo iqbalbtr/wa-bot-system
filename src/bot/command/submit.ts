@@ -7,14 +7,14 @@ import { ChalangeType } from '../type/chalange';
 import { eq, sql, InferSelectModel, asc, desc, and } from 'drizzle-orm';
 import { chalangeStudent, student } from '../../database/schema';
 import { downloadMediaMessage, proto } from 'baileys';
-import { google_drive } from '../core/google-drive';
+import google_api from '../core/google_api/auth';
 import Stream from 'stream';
 import { getChalangeData } from '../../api/lib/util';
 
 async function recordSubmission(userId: number, image: Stream.Transform, nim: string) {
     const chalange = getChalangeData();
 
-    const target_folder_id = await google_drive.getTargetFolder([chalange.category, chalange.start_date, nim]);
+    const target_folder_id = await google_api.drive.getTargetFolder([chalange.category, chalange.start_date, nim]);
    
     let newname = new Date().toLocaleString("id-ID", {
         day: "2-digit",
@@ -26,7 +26,7 @@ async function recordSubmission(userId: number, image: Stream.Transform, nim: st
         hour12: false,
     })
 
-    const attachment = await google_drive.uploadImageFromStream(image, `${newname}.png`, target_folder_id);
+    const attachment = await google_api.drive.uploadImageFromStream(image, `${newname}.png`, target_folder_id);
 
     await db.insert(chalangeStudent)
         .values({
@@ -85,7 +85,8 @@ export default {
         let extraScore = 0;
 
         try {
-            const user = await db.query.student.findFirst({ where: (s, { eq }) => eq(s.phone, payload.from) });
+            const student_phone = payload.isGroup ? payload.from : remoteJid.split("@")[0];
+            const user = await db.query.student.findFirst({ where: (s, { eq }) => eq(s.phone, student_phone) });
             if (!user || !user.nim) {
                 return client.messageClient.sendMessage(remoteJid, { text: `⚠️ *Akses Ditolak:* Silakan registrasi terlebih dahulu. !register` });
             }
