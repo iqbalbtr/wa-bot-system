@@ -116,7 +116,7 @@ async function videoStickerProcess(buffer: Buffer): Promise<Buffer> {
 const command: CommandType = {
     name: "sticker",
     description: "Mengonversi gambar atau video menjadi stiker WhatsApp",
-    usage: `\`${prefix}sticker\` Kirim juga gambar atau video dengan caption ini.`,
+    usage: `${prefix}sticker Kirim juga gambar atau video dengan caption ini.`,
     execute: async (message, client) => {
         const jid = message.key.remoteJid;
         if (!jid) {
@@ -172,6 +172,8 @@ const command: CommandType = {
 
             await client.messageClient.sendMessage(jid, {
                 sticker: stickerBuffer
+            }, {
+                quoted: message
             });
 
         } catch (error) {

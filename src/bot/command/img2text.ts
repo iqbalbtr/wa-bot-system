@@ -8,7 +8,7 @@ import logger from "../../shared/lib/logger";
 export default {
     name: "img2text",
     description: "Mengonversi gambar yang terdapat text menjadi text",
-    usage: `\`${prefix}img2text\` kirim gambar dengan caption ini.`,
+    usage: `${prefix}img2text kirim gambar dengan caption ini.`,
     execute: async (message, client, payload) => {
         const session = client.getSession();
         if (!session || !message.key?.remoteJid) return;

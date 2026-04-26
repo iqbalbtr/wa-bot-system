@@ -5,7 +5,7 @@ import { Client, CommandType } from "../type/client";
 export default {
     name: "help",
     description: "Menampilkan daftar perintah yang tersedia dan cara menggunakannya.",
-    usage: `\`${prefix}help\``,
+    usage: `${prefix}help`,
     execute(message, client) {
 
         const limit = 5
@@ -89,7 +89,9 @@ function getDataHelpWithPagination(client: Client, page: number, limit: number, 
         content += `*${command.name}*\n`;
         content += `_${command.description}_\n`;
         if (command.usage) {
-            content += `Contoh: ${command.usage}\n`;
+            content += `\`Contoh: ${command.usage}\`\n`;
+        } else {
+            content += `\`Contoh: ${prefix}${command.name}\`\n`;
         }
     }
 
