@@ -19,49 +19,24 @@ const ADMIN_PHONE_NUMBERS = [
 
 const getChalangeHistory = async (sequenceTarget?: number) => {
 
-    // query distict
-    const exampleChalange = [
-        {
-            id: 1,
-            student_id: 1,
-            attachment: "https://drive.google.com/file/d/1abc123/view",
-            score: 85,
-            challange_date: "2026-02-15",
-            challange_category: "web-development",
-            challange_title: "The Aesthetic Fix",
-            last_updated: "2026-02-20T10:30:00Z"
-        },
-        {
-            id: 4,
-            student_id: 2,
-            attachment: "https://drive.google.com/file/d/4jkl012/view",
-            score: 88,
-            challange_date: "2026-03-01",
-            challange_category: "cybersecurity",
-            challange_title: "API Performance Optimization",
-            last_updated: "2026-03-05T11:20:00Z"
-        }
-    ]
-
-    // example after normalize
-    const normalizedChalange = [
-        {
-            category: "web-development",
-            date: "2026-02-15",
-            title: "The Aesthetic Fix"
-        },
-        {
-            category: "cybersecurity",
-            date: "2026-03-01",
-            title: "API Performance Optimization"
-        }
-    ]
+    const result = await db
+        .select({
+            category: chalangeStudent.challange_category,
+            date: chalangeStudent.challange_date,
+            title: chalangeStudent.challange_title,
+        })
+        .from(chalangeStudent)
+        .groupBy(
+            chalangeStudent.challange_category,
+            chalangeStudent.challange_date,
+            chalangeStudent.challange_title,
+        );
 
     if (sequenceTarget) {
-        return normalizedChalange[sequenceTarget - 1] || null;
+        return result[sequenceTarget - 1] || null;
     }
 
-    return normalizedChalange;
+    return result;
 }
 
 const updateChalange = async (command: string, values: any) => {
@@ -159,7 +134,7 @@ export default {
                 const remoteJid = msg.key?.remoteJid!;
 
                 const normalizedChalange = await getChalangeHistory();
-
+                console.log('normalizedChalange', normalizedChalange);
                 client.sessionManager.updateSessionData(msg, { histories: normalizedChalange });
 
                 let content = `📜 *RIWAYAT TANTANGAN SEBELUMNYA:*\n\n`;
