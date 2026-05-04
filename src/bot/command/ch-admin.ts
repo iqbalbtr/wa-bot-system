@@ -225,7 +225,7 @@ export default {
         const link = `https://docs.google.com/spreadsheets/d/${sheetsId}/edit`;
 
         return client.messageClient.sendMessage(remoteJid, {
-          text: `🔗 *LINK EDIT TANTANGAN:*\n\n${link}\n\n*Catatan: Link ini hanya contoh. Implementasi penyimpanan dan pengambilan data tantangan dari Google Sheets atau sumber lain diperlukan untuk fungsionalitas penuh.*`,
+          text: `🔗 *LINK EDIT TANTANGAN:*\n\n${link}\n\n`,
         });
       },
     },
