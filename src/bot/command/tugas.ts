@@ -58,7 +58,7 @@ export const getCurrentCHalangeInfo = async () => {
     content += `*STATISTIK LIVE:*\n`;
     content += `┌ *Peserta:* ${participantCount} Member\n`;
     content += `├ *Total Entry:* ${entryCount} Laporan\n`;
-    content += `└ *Top Score:* ${topScore ? topScore + ' pts' : 'Belum ada'}\n\n`;
+    content += `└ *Top Score:* ${topScore ? topScore : 'Belum ada'}\n\n`;
 
     content += `*LINK PENTING:*\n`;
     content += `├ *Panduan:* ${changelog.instruction_url}\n`;

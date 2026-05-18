@@ -59,7 +59,7 @@ export default {
     res += `📑 Nama: ${user.name || "_Belum diisi_"}\n`;
     res += `🎭 Nick: ${user.nick || "_Belum diisi_"}\n`;
     res += `🆔 NIM: ${user.nim || "_Belum diisi_"}\n\n`;
-    res += `📊 *SKOR ANDA: ${totalScore[0].totalScore || 0} pts* (Skor untuk tantangan saat ini: ${currentScore[0]?.score || 0} pts)\n\n`;
+    res += `📊 *SKOR ANDA: ${totalScore[0].totalScore || 0}* (Skor untuk tantangan saat ini: ${currentScore[0]?.score || 0})\n\n`;
     res += `*Silakan isi data Anda menggunakan perintah berikut:*\n`;
     res += footer;
 
@@ -182,7 +182,7 @@ export default {
         res += `🆔 NIM: ${user.nim || "N/A"}\n`;
         res += `🎭 Nickname: ${user.nick || "N/A"}\n`;
         res += `📱 Ponsel: ${user.phone}\n\n`;
-        res += `📊 *SKOR ANDA: ${totalScore[0].totalScore || 0} pts* (Skor untuk tantangan saat ini: ${currentScore[0]?.score || 0} pts)\n\n`;
+        res += `📊 *SKOR ANDA: ${totalScore[0].totalScore || 0}* (Skor untuk tantangan saat ini: ${currentScore[0]?.score || 0})\n\n`;
         res += footer;
 
         client.messageClient.sendMessage(message.key?.remoteJid!, { text: res });

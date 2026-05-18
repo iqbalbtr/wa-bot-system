@@ -49,7 +49,7 @@ async function recordSubmission(userId: number, image: Stream.Transform, nim: st
 
 export default {
     name: "submit",
-    usage: `${prefix}submit [skor] [lampirkan_gambar]`,
+    usage: `${prefix}submit [lampirkan_file]`,
     description: "Mengirimkan hasil capaian Monthly Challenge",
     execute: async (msg, client, payload) => {
         const remoteJid = msg.key?.remoteJid!;
@@ -86,7 +86,7 @@ export default {
 
         try {
             const student_phone = payload.from.startsWith("62") ? payload.from : remoteJid.split("@")[0];
-            const user = await db.query.student.findFirst({ where: (s, { eq }) => eq(s.phone, student_phone) });
+            const user = await db.query.student.findFirst({ where: eq(student.phone, student_phone) });
             if (!user || !user.nim) {
                 return client.messageClient.sendMessage(remoteJid, { text: `⚠️ *Akses Ditolak:* Silakan registrasi terlebih dahulu. !register` });
             }
@@ -105,7 +105,7 @@ export default {
             const image = await downloadMediaMessage(msg, "stream", {})
             await recordSubmission(user.id, image, user.nim);
 
-            await client.messageClient.sendMessage(remoteJid, { text: `✅ *Submit Berhasil:* Skor Anda bertambah *${extraScore}* poin. Terus berjuang untuk masuk ke jajaran Top 5!` });
+            await client.messageClient.sendMessage(remoteJid, { text: `✅ *Submit Berhasil:* Terima kasih sudah mengirimkan hasil tantangan.` });
 
         } catch (error) {
             console.error("[SUBMIT_ERROR]", error);
