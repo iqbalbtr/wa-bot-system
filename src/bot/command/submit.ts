@@ -71,7 +71,7 @@ export default {
         const fileSize = payload.message?.imageMessage?.fileLength || payload.message?.documentMessage?.fileLength || 0;
 
         if (!file) {
-            return client.messageClient.sendMessage(remoteJid, { text: `⚠️ *Format Salah:* Kirim gambar. Contoh: *${prefix}submit*` });
+            return client.messageClient.sendMessage(remoteJid, { text: `⚠️ *Format Salah:* Kirim file. Contoh: *${prefix}submit*` });
         }
 
         if (Number(fileSize) > maxSizeMB * 1024 * 1024) {

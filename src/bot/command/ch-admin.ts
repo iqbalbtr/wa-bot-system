@@ -10,6 +10,7 @@ import { getTop } from "./top";
 import { getCurrentCHalangeInfo } from "./tugas";
 import google_api from "../core/google_api/auth";
 import { and, eq } from "drizzle-orm";
+import { ta } from "zod/v4/locales";
 
 const ADMIN_PHONE_NUMBERS = get_env("ADMIN_PHONE_NUMBER")
   .split(",")
@@ -182,7 +183,8 @@ export default {
       description: "Edit data tantangan `/edit urutan`",
       usage: `/edit urutan`,
       execute: async (msg, client, payload, data) => {
-        const remoteJid = msg.key?.remoteJid!;
+        try {
+          const remoteJid = msg.key?.remoteJid!;
 
         const params = payload.text;
 
@@ -193,6 +195,10 @@ export default {
             text: `❌ *Input Tidak Valid:* Harap masukkan nomor urutan tantangan yang valid.`,
           });
         }
+
+        client.messageClient.sendMessage(remoteJid, {
+          text: `⏳ *Memproses:* Sedang mengambil data tantangan dan mempersiapkan sheet untuk diedit...`,
+        });
 
         const result = await getChalangeHistory(targetSequence);
         
@@ -207,7 +213,7 @@ export default {
         const challange_record = await db
           .select()
           .from(chalangeStudent)
-          .innerJoin(student, eq(student.id, chalangeStudent.id))
+          .leftJoin(student, eq(student.id, chalangeStudent.student_id))
           .where(
             and(
               eq(chalangeStudent.challange_category, result.category),
@@ -215,11 +221,15 @@ export default {
             ),
           );
 
-        const table: any[][] = [["ID", "NIM", "Score", "dilarang mengganti format, dan data selain score! "]];
+        const table: any[][] = [["ID", "NIM", "Score", "Submission", "dilarang mengganti format, dan data selain score! "]];
 
-        challange_record.forEach((e) => {
-          table.push([e.chalange_students.id, e.students.nim, e.chalange_students.score]);
+        const resultDatas = challange_record.map(async(e) => {
+          const nim = (e.students as unknown as { nim: string }).nim;
+          const getFolder = await google_api.drive.getTargetFolder([result.category, result.date!, nim]);
+          table.push([e.chalange_students.id, nim, e.chalange_students.score, e.chalange_students.attachment ? `https://drive.google.com/drive/folders/${getFolder}` : "Belum submit"]);
         });
+
+        await Promise.all(resultDatas);
 
         await google_api.sheet.updateSheets(sheetsId, table);
         const link = `https://docs.google.com/spreadsheets/d/${sheetsId}/edit`;
@@ -227,6 +237,11 @@ export default {
         return client.messageClient.sendMessage(remoteJid, {
           text: `🔗 *LINK EDIT TANTANGAN:*\n\n${link}\n\n`,
         });
+        } catch (error) {
+          client.messageClient.sendMessage(msg.key?.remoteJid!, {
+            text: `❌ *Error:* Terjadi kesalahan saat memproses perintah. Pastikan format perintah benar dan coba lagi. ${error instanceof Error ? error.message : ""}`,
+          });
+        }
       },
     },
     {
@@ -279,7 +294,6 @@ export default {
 
         for (const row of sheetsTable.values) {
           const [id, _nim, score] = row;
-
           if (challengedata.get(id) != score) {
             await db.update(chalangeStudent).set({ score }).where(eq(chalangeStudent.id, id));
           }
